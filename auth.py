@@ -32,8 +32,6 @@ def init_users_db():
     Initialize the users MySQL database with a users table.
     Requires MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASSWORD in .env.
     """
-    connection = None
-    cursor = None
     try:
         connection = mysql.connector.connect(
             host=Config.MYSQL_HOST,
@@ -58,9 +56,8 @@ def init_users_db():
     except Error as e:
         st.error(f"Error initializing users database: {e}", icon="❌")
     finally:
-        if cursor is not None:
+        if connection.is_connected():
             cursor.close()
-        if connection is not None and connection.is_connected():
             connection.close()
 
 @contextmanager
